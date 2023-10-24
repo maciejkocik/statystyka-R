@@ -1,0 +1,371 @@
+---
+title: "Indeksowanie"
+author: "Bartosz Maćkiewicz"
+subtitle: Statystyka I z R
+output:
+  html_document: default
+  pdf_document: default
+---
+
+# Indeksowanie
+
+W tej części kursu będziemy zajmowac się indeksowaniem. Bardzo często chcemy z naszych danych "wybrać" tylko niektóre z nich - te obserwacje, które nas interesują. R jest językiem oferującym ogromne możliwości manipulacji danymi. Można "filtrować" dane na wiele sposobów, my jednak zajmiemy się zupełnie podstawowymi sposobami. Wykorzystamy podstawowe konstrukcje i nauczymy się tworzyć z nich bardziej skomplikowane.
+
+Zaprezentuje tutaj pewne podejście do kwesti indeksowania/filtrowania danych, dzięki któremu żadne tego typu zadanie nie będzie straszne. Wymagać to będzie jednak pewnej koncentracji.
+
+## Wektory
+
+Zacznijmy od prostego przypadku - stwórzmy pięcioelementowy wektor z liczbami.
+
+```{r}
+x <- c(1001,1002,1003,1004,1005)
+x
+```
+
+W jaki sposób wydobyć z tego wektora **tylko** jego trzeci element? Bardzo prosto! Możemy w tym celu użyć nawiasów kwadratowych.
+
+```{r}
+x[3]
+```
+
+W przeciwieństwie do niektórych nie mamy eleganckiej możliwości wybierania elementów "od końca". Możemy jednak posłużyć się pewnym trikiem i wykorzystać funkcję `length`, która zwraca długość wektora.
+
+```{r}
+# length(x) zwraca długość x, odejmujemy jeden, aby wybrać przedostatni
+x[length(x)-1] 
+```
+
+Świetnie nam poszło! Co jednak, gdybyśmy chcieli wybrać trzecią, czwartą i piątą liczbę? Spróbujmy w nawiasy kwadratowe wstawić wektor z więcej niż jednym elementem, który utworzymy za pomocą funkcji `c()`.
+
+```{r}
+x[c(3,4,5)]
+```
+
+Bingo! W poprzednim notatniku poznaliśmy sposób generowania wektorów kolejnych liczb. Jednym z nich była konstrukcja `dolna_granica:gorna_granica`. Sprawdźmy w takim razie, czy zadziała ona w naszym przypadku.
+
+```{r}
+x[3:5]
+```
+
+Doskonale! Dla wielu osób obeznanych z innymi językami programowania taka konstrukcja wygląda bardzo znajomo. Musimy jednak mieć świadomość, że w przypadku R podawanie *dwukropkowych* zakresów w nawiasach kwadratowych **nie jest** specjalną składnią do wybierania wycinków wektorów. Składnia z dwukropkiem tworzy po prostu wektor i ten właśnie wektor przekazujemy w nawiasach kwadratowych, aby wybrać wycinek naszego oryginalnego wektora.
+
+Omówione do tej pory przykłady mogą wydawać się dość trywialne. W praktyce, analizując dane, rzadko wiemy, który element wektora chcemy wybrać. Zwykle chcemy kierować się jakimś kryterium. Rozważmy prosty przypadek. Załóżmy, że mamy wektor, w którym znajduje się wiek (w latach) uczestników badania. Moglibyśmy chcieć wybrać tylko te wartości, które są większe lub równe niż 18 po to, aby potem sprawdzić jak długi jest nasz wektor i dzięki temu dowiedzieć się, ilu mieliśmy uczestników badania.
+
+```{r}
+age <- c(14, 18, 22, 18, 19, 33, 45, 14, 17, 16, 23, 26, 42)
+```
+
+Moglibyśmy oczywiście wyświetlić naszą zmienną i wybrać z niej tylko interesujące nas obserwacje, korzystając z poznanego przed chwilą sposobu. To jednak bardzo niepraktyczne - musielibyśmy przecież ręcznie liczyć, na których pozycjach w naszym wektorze znajdują się liczby większe niż 18! Czy da się to zrobić bardziej przebiegle? Okazuje się, że tak.
+
+Przyjrzyjmy się temu, jak działają w R operatory arytmetyczne takie jak $>$, $<$, $>=$, itp.
+
+```{r}
+age >= 18
+```
+
+Otrzymaliśmy wektor wartości logicznych (`logical`). Wartość logiczna `TRUE` znajduje się na tych pozycjach, dla których w oryginalnym wektorze `age` nasz warunek ($>=$) był spełniony. Z kolei `FALSE` znajduje się na tych pozycjach, gdzie warunek spelniony nie był.
+
+Okazuje się, że do indeksowania możemy użyć nie tylko wektorów z pozycjami, które nas interesują, ale również wektorów z wartościami logicznymi.
+
+```{r}
+age
+age >= 18
+age[age >= 18]
+```
+
+W tym wypadku wyrażenie to zwraca te elementy z wektora `age`, które znajdują się na pozycjach, na których w wektorze `age >= 18` występuje wartość `TRUE`. Na początku może wydawać się to dość skomplikowane, ale podejście to otwiera niesamowicie dużo możliwości.
+
+**Wiemy już że w nawiasach kwadratowych mogą znajdować się dwa rodzaje wartości - albo wektor typu `integer` albo wektor typu `logical`.**
+
+Najtrudniejsze za nami.
+
+## Macierze
+
+Czy możemy wykorzystać nasze umiejętności w sytuacji, gdy chcemy wybrać wartości z dwuwymiarowej macierzy? Zasada jest bardzo podobna. Musimy w nawiasach kwadratowych umieścić dwie wartości - numer(y) wiersza i numer(y) kolumny. Zilustrujmy to przykładem:
+
+```{r}
+macierz <- matrix(1:20, 5,4)
+macierz
+```
+
+```{r}
+# Pamiętamy o zasadzie: *wiersze pierwsze*!
+macierz[3,4] # trzeci wiersz i czwarta kolumna
+```
+
+Co jeśli chcemy wybrać wiersze lub kolumny w całości? R oferuje tutaj dość przyjazną składnie. Jeżeli zostawimy po którejś stronie przecinka w nawiasie kwadratowym puste miejsce, R potraktuje to jako wszystkie kolumny lub wiersze.
+
+Przykładowo, jeśli chcemy wybrać drugą, trzecią oraz czwartą kolumnę, to możemy to musimy powiedzieć R, że chcemy: - wybrać wszystkie wiersze, - wybrać kolumny 2, 3 oraz 4.
+
+Wynikiem takiej operacji będzie nowa macierz składająca się z 3 kolumn oraz takiej liczby wierszy, jaką miala oryginalna macierz.
+
+```{r}
+# wszystkie wiersze, ostatnie trzy kolumny (używamy pustego miejsca)
+macierz[,2:4]
+```
+
+Dokładnie w ten sam sposób możemy zastosować do wierszy:
+
+```{r}
+macierz[1:3,] # analogicznie pierwsze trzy wiersze
+```
+
+Sprobujmy zrobić coś nieco trudniejszego. Załóżmy, że chcemy stworzyć nową macierz, w której znajdą się wszystkie kolumny z oryginalnej macierzy, ale wyłącznie dla tych wierszy, dla których w drugiej kolumnie występowała wartość większa niż 6.
+
+Początkowo może brzmieć to skomplikowanie, ale wystarczy, że wykorzystamy nasze dodatkowe umiejętności. Odpowiednie wyrażenie wygląda tak:
+
+```{r}
+macierz[macierz[,2] >6,]
+```
+
+Jak widzimy wyrażenie to prawidłowo wybrało trzeci oraz czwarty wiesz.
+
+Spróbujmy prześledzić powyższy przykład krok po kroku.
+
+Oto nasza macierz w całej okazałości:
+
+```{r}
+macierz
+```
+
+Jej drugą kolumnę możemy wybrać, korzystając ze znanego nam sposobu.
+
+```{r}
+macierz[ ,2] 
+```
+
+Następnie musimy sprawdzić, które wartości w tej kolumnie są większe niż 6. Wykorzystamy do tego standardowy operator arytmetyczny $>$.
+
+```{r}
+macierz[ ,2] > 6
+```
+
+Wiemy teraz, że w drugiej kolumnie wartości większe niż 6 znajdują się w trzecim i czwartym wierszu. Zauważmy, że wyrażenie to zwróciło wektor typu `logical`. Wobec tego możemy go użyć do wybrania z oryginalnej macierzy odpowiednich wierszy, w pewnym sensie składając wszystkie te wyrażenia w jedną całość.
+
+```{r}
+macierz[macierz[,2] > 7, ]
+```
+
+Nie było to takie straszne!
+
+## Listy
+
+Listy w przeciwieństwie do wektorów przechowują sekwencje wartości różnych typów. Możemy w niej przechowywać wektory różnych typów o różnej długości a nawet inne listy. W tym sensie są podobne do list z niektórych innych języków programowania. Listy tworzymy za pomocą funkcji `list`.
+
+```{r}
+lista <- list(1:10, # pierwszy element: wektor typu `integer`
+              # drugi element: wektor typu `character`
+              c('Entliczek', "Pętliczek", 'Czerwony', 'Stoliczek'),
+              TRUE, # trzeci element: wektor typu `logical`
+              TRUE, # czwarty element: wektor typu `logical`
+              list( # piąty element: lista
+              # pierwszy element: wektor typu `character`
+                c('Lista', "zagnieżdżona", "w", "drugiej", "liście")
+              ))
+lista
+```
+
+Elementy listy możemy wybrać za pomocą podwójnego nawiasu kwadratowego `[[]]`. Przykładowo:
+
+```{r}
+lista[[3]] # trzeci element listy
+```
+
+W przypadku zagnieżdżonych list bardzo często chcemy wybrać pewien element pewnego elementu listy. Wówczas musimy użyć znanej już nam techniki. Spróbujmy wybrać słowo "Czerwony".
+
+```{r}
+lista[[2]][3] # trzeci element drugiego elementu listy
+```
+
+Podobnie, jeżeli mamy listy zagnieżdżone, możemy użyć kilku indeksów jednocześnie. Wybierzmy więc słowo "drugiej":
+
+```{r}
+lista[[5]][[1]][4] # czwarty element pierwszego elementu listy piątego elementu listy
+```
+
+Elementom listy możemy nadawać nazwy. Dlatego w niektórych sytuacjach możemy traktować je jak słowniki z innych języków programowania, przechowujące pary klucz-wartość.
+
+Nazwane listy również tworzymy przy pomocy funkcji `list`.
+
+```{r}
+lista_nazwana <- list(imiona = c('Marek', 'Kasia', 'Sławek'),
+                      czesci_ciala = c('Noga', 'Ręka', 'Palec', 'Głowa')
+                      )
+lista_nazwana
+```
+
+W przypadku list z nazwanymi elementami, możemy wybierać je za pomocą liczb albo nazw.
+
+```{r}
+lista_nazwana[[1]] # możemy wybierać cały czas za pomocą liczb
+lista_nazwana[['imiona']] # ale często wygodniej będzien nam użyć nazw
+lista_nazwana$imiona # krótszy, często spotykany zapis
+```
+
+## Ramki danych (*data frame*)
+
+W przypadku ramek danych, to wybieranie z nich elementów działa bardzo podobnie, co wybieranie elementow z macierzy oraz z list.
+
+Muszę uprzedzić, że pod koniec lekcji kod stanie się niestety strasznie "makaroniasty". Istnieje wiele bibliotek do R, które ułatwiają tego rodzaju zadania. Zależy mi jednak, aby państwo uważnie prześledzili poniższe przykłady i spróbowali zrozumieć każdy krok oraz nauczyli się przeprowadzać "dekonstrukcje" poszczególnych elementów długiego i zagmatwanego wyrażenia.
+
+W tym przykładzie będziemy korzystać z ramki danych `mtcars` dostępnej w standardowej instalacji R. Ten zbiór danych zawiera informacje o kilkunastu modelach samochodów. Możemy podejrzeć pierwsze 6 wierszy za pomocą funkcji `head`.
+
+```{r}
+data(mtcars)
+head(mtcars) 
+```
+
+Rozpoczniemy od przyjrzenia się naszemu zbiorowi danych. Zobaczmy, ile ma kolumn, ile wierszy i jak nazywają się poszczególne kolumny.
+
+```{r}
+dim(mtcars)
+```
+
+Mamy 32 wiersze oraz 11 kolumn. Pierwsza kolumna (z nazwami samochodów) to nazwa wiersza (`rownames`).
+
+```{r}
+colnames(mtcars)
+```
+
+Za pomocą pojedynczych nawiasów kwadratowych możemy wybrać z danej ramki danych pewien jej podzbiór. Wybierzmy pierwszą kolumnę.
+
+```{r}
+head(mtcars[1]) # domyślnie head zwraca pierwsze 6 wierszy
+```
+
+Spróbujmy wybrać drugą, czwartą i szóstą kolumnę umieszczając w nawiasach kwadratowych trzyelementowy wektor. Funkcja `tail` jest bardzo podobna do funkcji `head` i umożliwia wybranie ostatnich 6 wierszy.
+
+```{r}
+tail(mtcars[c(2,4,6)])
+```
+
+Jeżeli chcemy, to ramki danych indeksować możemy dokładnie tak jak macierze. Wybierzmy wartość z drugiego wiersza (Mazda RX4 WAG) czwartej kolumny (`hp` czyli liczba koni mechanicznych).
+
+```{r}
+mtcars[2,4]
+```
+
+Za pomocą podwójnych nawiasów kwadratowych możemy wybrać całą kolumnę jako wektor.
+
+```{r}
+mtcars[[3]]
+```
+
+Do indeksowania możemy używać oczywiście również nazw. Wybierzmy dwie kolumny - opisujące liczbę biegów i liczbę koni mechanicznych.
+
+```{r}
+head(mtcars[c('hp', 'gear')])
+```
+
+Przekazując w nawiasach kwadratowych nazwę kolumny otrzymujemy ją jako wektor.
+
+```{r}
+mtcars[['hp']]
+```
+
+Nic nie stoi na przeszkodzie, żebyśmy wybrali zarówno kolumny, jak i wiersze. Robimy to tak samo jak w przypadku macierzy, oddzielając wartości przecinkiem.
+
+```{r}
+mtcars[2:5, c(3,5)]
+```
+
+Ale uwaga! Jeśli wybierzemy tylko jedną konkretną wartość jako kolumnę (a nie zakres) to nie otrzymamy ramki danych z jednym elementem, ale konkretną wartość odpowiedniego typu. Bywa to czasami uciążliwe.
+
+Zilustrujmy to na przykładzie. Jeżeli wybierzemy drugi wiersz kolumny 3, 4 i 5, to R zwróci nam ramkę danych.
+
+```{r}
+mtcars[2,3:5]
+```
+
+Z kolei jeśli wybierzemy wiersze 3, 4 i 5 oraz drugą kolumnę, to R zwróci nam wektor.
+
+```{r}
+mtcars[3:5,2] 
+```
+
+Za pomocą poznanych narzędzi możemy łatwo filtrować dane. Wyobraźmy sobie, że interesuje nas ramka danych z tylko dwoma wartosciami - liczbą koni mechanicznych oraz mil na galon benzyny. Chcemy jednak wybrać wyłącznie te samochody, które mają więcej niż 150 koni mechanicznych. Operację tę możemy wykonać w dwóch krokach:
+
+1.  Zastanawiamy się jak wydobyć z naszej ramki danych tylko te wiersze, w których wartość hp jest większa niż 150.
+
+2.  Zastanawiamy się, jak stworzyć ramkę w której będą tylko te dwie kolumny.
+
+Do pierwszego zadania wykorzystamy sposób analogiczny do tego poznanego przy macierzach, drugie zrobimy sposobem poznanym przed chwilą.
+
+Stwórzmy nową ramkę danych, w której będą tylko samochody mające więcej niż 150 koni mechanicznych.
+
+```{r}
+mt_cars_150hp = mtcars[mtcars[['hp']] > 150,] # Krok 1 - filtrujemy
+```
+
+Następnie z tej nowoutworzonej ramki danych wybierzmy dwie kolumny - `mpg` (*miles per galon* czyli liczba mil, które można przejechać na jednym galonie benzyny) oraz `hp`.
+
+```{r}
+mt_cars_150hp[c('mpg','hp')] # Krok 2 - wybieramy
+```
+
+Obie operacje możemy również wykonać w jednym kroku.
+
+```{r}
+mtcars[mtcars[['hp']] > 150, c('mpg','hp')]
+```
+
+Do zawartości kolumn możemy dostać się także za pomocą znaku dolara (`$`) oraz ich nazw. Sposób ten jest równoważny z wybieraniem wartości za pomocą podwójnego nawiasu kwadratowego (`mtcars[["mpg"]]`). Rezultatem tej operacji jest nie ramka danych (jak w przypadku `mtcars["mpg"]`), lecz wektor.
+
+```{r}
+mtcars$mpg
+```
+
+Zobaczmy, jakie wartości w kolumnie 'mpg' występują dla samochodów, które mają powyżej 150 koni mechanicznych. Użyjemy do tego dokładnie takiej samej techniki jak w przypadku macierzy, zastępujemy jednak liczbę określającą kolumnę jej nazwą.
+
+```{r}
+mtcars[mtcars[['hp']] > 150,'mpg']
+```
+
+Załóżmy, że że chcemy się dowiedzieć, jaka jest najwyższa wartość w tej kolumnie. Użyjemy więc funkcji `max`, która zwraca największą wartość w danym wektorze.
+
+```{r}
+max(mtcars[mtcars[['hp']] > 150,'mpg']) # analogicznie moglibyśmy użyć funkcji min
+```
+
+Nie wiemy jednak co to za samochód! Oczywiście, moglibyśmy po prostu zajrzeć do naszej oryginalnej ramki danych, ale chcielibyśmy, żeby R zrobił to za nas. Wiemy, jaka jest największa wartość w kolumnie `mpg` dla samochodów, które mają więcej niż 150 koni mechanicznych - jest to $19.7$. W takim razie możemy wybrać z naszej ramki danych tylko ten wiesz, w którym wartość w kolumnie `mpg` jest równa właśnie $19.7$.
+
+```{r}
+mtcars[mtcars$mpg == max(mtcars[which(mtcars[['hp']] > 150),'mpg']), ]
+```
+
+Spróbujmy rozbić to na kilka mniejszych kroków.
+
+Krok pierwszy: Wybranie wartości z kolumny `mpg` dla samochodów, które mają więcej niż 150 koni mechanicznych:
+
+```{r}
+mpg_for_over_150hp <- mtcars[which(mtcars[['hp']] > 150),'mpg']
+mpg_for_over_150hp
+```
+
+Krok drugi: ustalenie, jaka jest najwyższa wartość w tym wektorze:
+
+```{r}
+max_mpg_for_over_150hp <- max(mpg_for_over_150hp)
+max_mpg_for_over_150hp
+```
+
+Krok trzeci: sprawdzenie, dla których wierszy w ramce danych `mtcars` wartość w kolumnie `mpg` wynosi `max_mpg_for_over_150hp`:
+
+```{r}
+which_max_mpg_for_over_150hp <- mtcars$mpg == max_mpg_for_over_150hp
+which_max_mpg_for_over_150hp
+```
+
+Krok czwarty: użycie wynikowego wektora typu `logical` do wybrania interesującego nas wiersza:
+
+```{r}
+mtcars[which_max_mpg_for_over_150hp, ]
+```
+
+Wszystko to możemy (jeżeli chcemy) zrobić w jednym kroku, ale kod może być nieczytelny - szczególnie dla początkujących programistów w R!
+
+```{r}
+mtcars[mtcars$mpg == max(mtcars[which(mtcars[['hp']] > 150),'mpg']), ]
+```
+
+Zauważmy, że w ten sposób możemy konstruować bardzo skomplikowane reguły wybierania wartości z ramek danych. Możemy używać dowolnych operatorów arytmetycznych oraz logicznych, dzięki czemu możemy tworzyć złożone warunki. Czasami jednak (jak w tym przykładzie) warto rozbić kod na kilka kroków.

@@ -1,0 +1,70 @@
+---
+title: "Praca domowa - struktury kontrolne"
+author: "Bartosz Maćkiewicz"
+output: html_document
+---
+
+# Zadanie do notebooka "Konstrukcje warunkowe"
+
+Proszę wczytać zbiór danych `USArrests` za pomocą polecenia `data(USArrest)`. Proszę napisać krótki kod, który przygotowuje krótki "raport" na temat aresztowań w stanach zjednoczonych w 1973 roku. W kolumnach `Murder`, `Assault` i `Rape` znajduje się liczba aresztowań na 100 000 mieszkańców, w kolumnie `UrbanPop` znajduje się odsetek populacji mieszkającej w miastach. Dla każdego stanu kod ma generować taki oto fragment (przykład dla Alabamy):
+
+```         
+Nazwa stanu: Alabama
+Aresztowani w sprawie morderstw (na 100 000 mieszkańców): 13.2 (powyżej średniej)
+Aresztowani w sprawie napadów (na 100 000 mieszkańców): 236 (powyżej średniej)
+Aresztowani w sprawie gwałtów (na 100 000 mieszkańców): 21.2 (powyżej średniej)
+Odsetek populacji mieszkającej w miastach: 58% (poniżej średniej)
+```
+
+```{r}
+
+
+for (wiersz in 1:nrow(USArrests)){
+      zdanie <- paste('Nazwa stanu: ', 
+      row.names(USArrests)[wiersz])
+      cat(zdanie, "\n")
+      
+      zdania <- list()
+      
+      for (k in 1:4){
+        val = USArrests[[k]][wiersz]
+        avg = round(mean(USArrests[[k]]))
+  
+        if (val > avg)
+          isAvg = ' (powyżej średniej)'
+        else
+          isAvg = ' (poniżej średniej)'
+
+        p = ""
+        
+        if (k == 1)
+          sprawa = 'Aresztowani w sprawie morderstw (na 100 000 mieszkańców): '
+        else if (k == 2)
+            sprawa = 'Aresztowani w sprawie napadów (na 100 000 mieszkańców): '
+        else if (k == 3){
+          sprawa = "Odsetek populacji mieszkającej w miastach: "
+          p = "%"
+        }
+        else
+            sprawa = 'Aresztowani w sprawie gwałtów (na 100 000 mieszkańców): '
+        
+        z <- paste(
+          sprawa,
+          val, 
+          p,
+          isAvg,
+          " ",
+          sep=""
+        )
+        
+        zdania[k] <- z
+      }
+      
+      cat(zdania[[1]], "\n")
+      cat(zdania[[2]], "\n")
+      cat(zdania[[4]], "\n")
+      cat(zdania[[3]], "\n")
+      cat("\n")
+      
+}
+```

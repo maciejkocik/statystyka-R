@@ -1,0 +1,121 @@
+---
+title: "Praca domowa - typy danych"
+author: "Bartosz Maćkiewicz"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Zadania domowe
+
+1.  Zapoznać się z trzema notatnikami (zakładka "Materiały"):
+
+-   "Podstawowe typy danych"
+-   "Zaawansowane typy danych"
+-   "Indeksowanie"
+
+2.  Wykonać poniższe zadania
+
+### Zadania do notebooka "Zaawansowane typy danych"
+
+A. Proszę napisać w R polecenie (lub ciąg poleceń), które tworzy następującą macierz bez użycia funkcji `c()` (proszę pogłówkować jak to zrobić sprytnie!):
+
+```         
+100 200 300
+
+200 300 400
+
+300 400 500
+
+400 500 600
+
+500 600 700
+```
+
+Podpowiedź: proszę przeanalizować, co robi ten kod `1:5 * 100` i zastanowić się, jak on działa.
+
+```{r}
+m1 <- matrix(1:5 * 100, nrow=5, ncol=1)
+m2 <- cbind(m1, matrix(2:6 * 100, nrow=5, ncol=1))
+cbind(m2, matrix(3:7 * 100, nrow=5, ncol=1))
+```
+
+B. Proszę stworzyć następującą macierz za pomocą polecenia `rbind()`.
+
+```         
+250  34   46   58   7
+
+170  11   42   13   14
+
+200  300  40   50  600
+```
+
+```{r}
+m1 <- matrix(c(250, 34, 46, 58, 7), nrow=1)
+m2 <- rbind(m1, matrix(c(170, 11, 42, 13, 14), nrow=1))
+rbind(m2, matrix(c(200, 300, 40, 50, 600), nrow=1))
+```
+
+C. Proszę stworzyć ramkę danych (`data.frame`) o liderach Pokemon w regionie Kanto. Nazwą wiersza ma być imie lidera (proszę doczytać z Notatnika o nazwach wierszy), a kolumnami
+
+-   miasto
+-   typ Pokemonów, którymi posługuje się dany lider
+-   kolejność (proszę założyć, że na stronie podana jest prawidłowa - od pierwszego do ostatniego) [Region Kanto](http://pokemon.wikia.com/wiki/Kanto_Gyms)
+
+```{r}
+
+Liderzy <- data.frame(
+  Trenerzy = c("Brock", "Misty", "Lt. Surge", "Erika", "Koga", "Sabrina", "Blaine", "Giovanni"),
+  Miasto = c("Pewter City Gym", "Cerulean City Gym",
+"Vermilion City Gym", "Celadon City Gym", "Fuchsia City Gym", "Saffron City Gym", "Cinnabar Island Gym", "Viridian City Gym"), 
+  Typ = c("Rock", "Water", "Electric", "Grass", "Poison", "Psychic", "Fire", "Ground"), row.names=1)
+Liderzy
+```
+
+### .Zadania do notebooka "Indeksowanie"
+
+D. Proszę napisać własnymi słowami (po polsku), który element czego wybiorą następujące polecenia:
+
+```         
+lista[[4]][[3]][1]
+
+lista$rasy_psow$male_psy[2]
+```
+
+**Odpowiedź**
+
+Pierwsze polecenie wybierze pierwszy element trzeciego elementu listy czwartego elementu listy "lista".
+
+Drugie polecenie wybierze drugi element z elementu listy "male_psy", ktora jest zagnieżdżona w liście "rasy_psow", która z kolei zagnieżdżona jest w liście "lista".
+
+Następnie proszę stworzyć jakiekolwiek przykładowe listy, dla których te polecenia (z zadanie wyżej) zwracają jakiś rezultat.
+
+```{r}
+# pierwsze polecenie
+lista <- list(FALSE, FALSE, FALSE, list(FALSE, FALSE, list(TRUE, FALSE)))
+lista[[4]][[3]][1]
+
+
+# drugie polecenie
+lista <- list(rasy_psow = list(male_psy = c("mops", "pudel"), duze_psy = c("husky", "doberman")), rasy_kotow = c("dachowiec", "sfinks"))
+lista$rasy_psow$male_psy[2]
+```
+
+E. Proszę wczytać zbiór danych `beaver1` za pomocą polecenia `data(beavers)` i napisać polecenie R, które odpowie na następujące pytania. Istotne jest, aby Państwa polecenia zwracały dokładną odpowiedź (np. "346" albo "35.4").
+
+[Więcej o tym zbiorze danych](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/beavers.html)
+
+a)  Którego dnia pomiarów bóbr osiągnął rekordową, najwyższą temperaturę?
+
+```{r}
+beaver1[beaver1$temp == max(beaver1$temp), "day"]
+```
+
+b)  Jaką najwyższą temperaturę osiągnął bóbr w czasie okresów aktywnych pierwszego dnia pomiarów?
+
+```{r}
+first_day_active_temp <- beaver1[beaver1$day == 346 & beaver1$activ, "temp"]
+max(first_day_active_temp)
+```

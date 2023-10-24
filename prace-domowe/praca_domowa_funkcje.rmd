@@ -1,0 +1,76 @@
+---
+title: "Praca domowa - funkcje"
+author: "Bartosz Maćkiewicz"
+output: html_document
+---
+
+# Zadania do notebooka "Funkcje. `apply`, `lapply`, `sapply`"
+
+Czasami w życiu zdarza się, że w naszych danych znajdują się obserwacje odstające (*outliers*). Często chcielibyśmy policzyć średnią bez ich uwzględniania. 
+
+Proszę napisać 2 funkcje obliczające średnią:
+
+* średnia "przycięta" (Wilcox)
+* średnia Tukeya (Tukey)
+
+Wszystko co potrzeba zaokrąglić zaokraglamy dla naszych celów w dół (`floor`)
+
+# Średnia "przycięta"
+
+Z naszych obserwacji odrzucamy 10% najwyższych i najniższych wartości i z nich liczymy średnią. Proszę nie oszukiwać i nie używać funkcji `mean` z argumentem `trim` ani nie patrzeć, jak w tej funkcji wbudowanej w R jest to zrobione. Można jednak użyć funkcji `mean` z odpowiednim argumentem do sprawdzenia, czy napisana przez Państwa funkcja zwraca właściwy wynik.
+
+Funkcja powinna przyjmować 2 argumenty:
+
+*Specyfikacja funkcji*
+
+`srednia_przycieta(wektor, ileprocentprzycinamy)`
+
+Argument `ileprocentprzycinamy` ma przyjmować domyślnie wartość 10.
+
+## Przykład 
+
+Oryginalne wartości (uporządkowane).
+
+1,1,2,3,4,4,4,4,5,6,7,8,8,8,8,10,12,15,15,19
+
+Wartości "przycięte" (ucinamy dwie najniższe i dwie najwyższe bo 0,1*20 = 2)
+
+2,3,4,4,4,4,5,6,7,8,8,8,8,10,12,15
+
+Przydatne funkcje: `sort` oraz `length`.
+
+```{r}
+# Tutaj miejsce na Twój kod
+```
+
+# Średnia Tukeya
+
+Tukey zaproponował inną metodę radzenia sobie z tym problemem. Jego metoda polega na wykluczeniu przy obliczaniu średniej tych wartości, które są:
+* mniejsze od różnicy pierwszego kwartyla i 1,5-krotności rozstępu ćwiartkowego
+* większe od sumy trzeciego kwartyla i 1,5-krotności rozstępu ćwiartkowego. 
+
+Rozstęp ćwiartkowy to różnica między trzecim a pierwszym kwartylem.
+
+*Specyfikacja funkcji*
+
+`srednia_tukeya(wektor, wielokrotnosciqr)`
+
+Argument `wielokrotnosciqr` ma przyjmować domyślnie wartość 1,5.
+
+## Przykład
+
+1,1,2,3,4,4,4,4,5,6,7,8,8,8,8,10,12,15,15,19
+
+IQR - 4,5
+
+1.5 * IQR = 1,5 * 4,5 = 6.75
+
+I kwartyl - 4,0 (więc odcinamy mniejsze niż -2,75)
+
+III kwartyl - 8,5 (więc odcinamy większe od 15,25)
+
+UWAGA: Istnieje przydatna funkcja `IQR`, której pozwalam użyć w zadaniu domowym!
+
+```{r}
+# Tutaj miejsce na Twój kod
+```
