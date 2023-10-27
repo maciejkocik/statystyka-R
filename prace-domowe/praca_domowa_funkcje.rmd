@@ -6,12 +6,12 @@ output: html_document
 
 # Zadania do notebooka "Funkcje. `apply`, `lapply`, `sapply`"
 
-Czasami w życiu zdarza się, że w naszych danych znajdują się obserwacje odstające (*outliers*). Często chcielibyśmy policzyć średnią bez ich uwzględniania. 
+Czasami w życiu zdarza się, że w naszych danych znajdują się obserwacje odstające (*outliers*). Często chcielibyśmy policzyć średnią bez ich uwzględniania.
 
 Proszę napisać 2 funkcje obliczające średnią:
 
-* średnia "przycięta" (Wilcox)
-* średnia Tukeya (Tukey)
+-   średnia "przycięta" (Wilcox)
+-   średnia Tukeya (Tukey)
 
 Wszystko co potrzeba zaokrąglić zaokraglamy dla naszych celów w dół (`floor`)
 
@@ -27,27 +27,30 @@ Funkcja powinna przyjmować 2 argumenty:
 
 Argument `ileprocentprzycinamy` ma przyjmować domyślnie wartość 10.
 
-## Przykład 
+## Przykład
 
 Oryginalne wartości (uporządkowane).
 
 1,1,2,3,4,4,4,4,5,6,7,8,8,8,8,10,12,15,15,19
 
-Wartości "przycięte" (ucinamy dwie najniższe i dwie najwyższe bo 0,1*20 = 2)
+Wartości "przycięte" (ucinamy dwie najniższe i dwie najwyższe bo 0,1\*20 = 2)
 
 2,3,4,4,4,4,5,6,7,8,8,8,8,10,12,15
 
 Przydatne funkcje: `sort` oraz `length`.
 
 ```{r}
-# Tutaj miejsce na Twój kod
+srednia_przycieta <- function(wektor, ileprocentprzycinamy = 10){
+  ile_przycinamy = length(wektor) * ileprocentprzycinamy / 100
+  for (x in 1:length(wektor)){
+    
+  }
+}
 ```
 
 # Średnia Tukeya
 
-Tukey zaproponował inną metodę radzenia sobie z tym problemem. Jego metoda polega na wykluczeniu przy obliczaniu średniej tych wartości, które są:
-* mniejsze od różnicy pierwszego kwartyla i 1,5-krotności rozstępu ćwiartkowego
-* większe od sumy trzeciego kwartyla i 1,5-krotności rozstępu ćwiartkowego. 
+Tukey zaproponował inną metodę radzenia sobie z tym problemem. Jego metoda polega na wykluczeniu przy obliczaniu średniej tych wartości, które są: \* mniejsze od różnicy pierwszego kwartyla i 1,5-krotności rozstępu ćwiartkowego \* większe od sumy trzeciego kwartyla i 1,5-krotności rozstępu ćwiartkowego.
 
 Rozstęp ćwiartkowy to różnica między trzecim a pierwszym kwartylem.
 
@@ -63,7 +66,7 @@ Argument `wielokrotnosciqr` ma przyjmować domyślnie wartość 1,5.
 
 IQR - 4,5
 
-1.5 * IQR = 1,5 * 4,5 = 6.75
+1.5 \* IQR = 1,5 \* 4,5 = 6.75
 
 I kwartyl - 4,0 (więc odcinamy mniejsze niż -2,75)
 
