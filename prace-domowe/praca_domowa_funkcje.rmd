@@ -47,7 +47,7 @@ srednia_przycieta <- function(wektor, ileprocentprzycinamy = 10){
   wektor <- head(wektor, length(wektor) - ile_przyciac)
   wektor <- tail(wektor, length(wektor) - ile_przyciac)
   
-  return(wektor)
+  return(sum(wektor)/length(wektor))
 
 }
 
@@ -81,5 +81,20 @@ III kwartyl - 8,5 (więc odcinamy większe od 15,25)
 UWAGA: Istnieje przydatna funkcja `IQR`, której pozwalam użyć w zadaniu domowym!
 
 ```{r}
-# Tutaj miejsce na Twój kod
+srednia_tukeya <- function(wektor, wielokrotnosciqr = 1.5){
+  ile_przyciac = IQR(wektor) * wielokrotnosciqr
+  
+  q1 <- quantile(wektor)[2]-ile_przyciac
+  q3 <- quantile(wektor)[4]+ile_przyciac
+
+  wektor2 <- wektor[wektor > q1 & wektor < q3]
+  
+  return(sum(wektor2)/length(wektor2))
+
+}
+
+
+cat(srednia_tukeya(c(1,1,2,3,4,4,4,4,5,6,7,8,8,8,8,10,12,15,15,19)))
+
+
 ```
