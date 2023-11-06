@@ -37,6 +37,20 @@ legend("topright", c("12h przed", "10min przed"), col=c("blue", "red"), lwd=10)
 Przygotuj wykres pudełkowy (`boxplot`), wykres słupkowy (`barplot`) wykres skrzypcowy (`vioplot` z pakietu `vioplot`) ilustrujące kształt rozkładu obserwacji w obu pomiarach. Postaraj się, aby oba zbiory danych były na jednym wykresie (czyli narysuj 3 wykresy, a nie 6). Nie zapomnij o nałożeniu na wykres legendy oraz podpisów osi oraz wybraniu ładnych kolorów. Co możesz wywnioskować na podstawie poszczególnych wykresów? Jak różnią się od siebie te trzy metody wizualizacji w tym wypadku?
 
 ```{r}
+library(vioplot)
+par(mfrow=c(1,1))
+
+dane <- data.frame(A = pomiary$X12_hours, B = pomiary$X10_minutes)
+
+boxplot(dane, col=c("hotpink", "cyan"))
+
+barplot(as.matrix(dane), beside=TRUE, col=c("deeppink", "dodgerblue"))
+
+vioplot(dane, col=c("maroon1", "royalblue"))
+
+# TODO:
+# podpisz wykresy (osie i legenda)
+# zapisz wnioski
 ```
 
 *Tutaj miejsce na Twoją odpowiedź*
