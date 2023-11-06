@@ -1,0 +1,66 @@
+---
+title: "Praca domowa - podstawy grafiki"
+author: "Bartosz Maćkiewicz"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Zadanie 1
+
+Hoaglin, Mosteller i Tukey (1983) zebrali dane na temat poziomu beta-endorfin we krwi jako funkcji stresu. Zmierzyli poziomy beta-endorfin 19 pacjentów 12 godzin przed stresującą operacją oraz 10 minut przed operacją. Obserwacje znajdują się w pliku `hoaglin1983.csv` i podane są w jednostkach fmol/ml.
+
+## Zadanie A
+
+Przygotuj dwa histogramy ilustrujący rozkład wartości w obu pomiarach. Nie zapomnij o nałożeniu na wykres legendy oraz podpisów osi. Co możesz na podstawie tych dwóch histogramów wywnioskować?
+
+```{r}
+# pomiary <- read.csv("dane/hoaglin1983.csv")
+
+par(mfrow = c(1, 2))
+
+hist(pomiary$X12_hours, col="blue", main = "12 godzin przed operacją", xlab = "Poziom beta-endorfin", ylab = "Częstość", breaks=10)
+
+hist(pomiary$X10_minutes, col="red", main = "10 minut przed operacją", xlab = "Poziom beta-endorfin", ylab = "Częstość", breaks=10)
+
+legend("topright", c("12h przed", "10min przed"), col=c("blue", "red"), lwd=10)
+
+# TODO:
+# edytuj breaks
+# napisz wnioski
+```
+
+*Tutaj miejsce na Twoją odpowiedź*
+
+## Zadanie B
+
+Przygotuj wykres pudełkowy (`boxplot`), wykres słupkowy (`barplot`) wykres skrzypcowy (`vioplot` z pakietu `vioplot`) ilustrujące kształt rozkładu obserwacji w obu pomiarach. Postaraj się, aby oba zbiory danych były na jednym wykresie (czyli narysuj 3 wykresy, a nie 6). Nie zapomnij o nałożeniu na wykres legendy oraz podpisów osi oraz wybraniu ładnych kolorów. Co możesz wywnioskować na podstawie poszczególnych wykresów? Jak różnią się od siebie te trzy metody wizualizacji w tym wypadku?
+
+```{r}
+```
+
+*Tutaj miejsce na Twoją odpowiedź*
+
+## Zadanie C
+
+Odejmij od wartości z kolumny z poziomem beta-endorfin 12 godzin przed operacją wartości 10 minut przed operacją. Uzyskany wektor będzie zawierał różnice między tymi pomiarami dla każdego badanego. Narysuj histogram i zinterpretuj go. Nie zapomnij o nałożeniu na wykres legendy oraz podpisów osi
+
+```{r}
+# Tutaj miejsce na Twój kod
+```
+
+*Tutaj miejsce na Twoją odpowiedź*
+
+# Zadanie 2
+
+Wiemy, że palenie tytoniu odpowiada za wiele negatywnych skutków dla ludzkiego zdrowia. Istnieją pewne empiryczne świadectwa, że wpływa również na płodność. Weinberg i Gladen (1986, `weinberg1986.csv`) przebadali skutki palenia na łatwość zachodzenia kobiet w ciążę. W tym celu wzięli próbę 586 kobiet, które planowały ciąże i zapytali jak wiele cykli miesiączkowych upłynęło od odstawienia antykoncepcji zanim zaszły w ciążę. Badacze podzielili również kobiety na dwie grupy - palące i niepalące.
+
+## Zadanie A
+
+Przygotuj wykres słupkowy (*stacked barplot*), składający się z dwóch kolumn. Jedna odpowiadać ma kobietom palącym, druga kobietom niepalącym. Segmenty każdej z kolumn mają odpowiadać proporcji kobiet w danej grupie, dla których od zakończenia antykoncepcji do zajścia w ciąże upłynęł 1 cykl, 2 cykle i 3+ cykle. Do opracowania statystycznego danych przydadzą się funkcje `table` oraz `prop.table`. Wykres stworzyć można korzystając z funkcji `barplot`. Nie zapomnij o nałożeniu na wykres legendy oraz podpisów osi, spróbuj również wybrać czytelne kolory dla poszczególnych segmentów. Co możesz stwierdzić na podstawie takiego wykresu?
+
+```{r}
+# Tutaj miejsce na Twój kod
+```
+
+*Tutaj miejsce na Twoją odpowiedź*
