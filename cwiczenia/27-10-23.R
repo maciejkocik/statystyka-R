@@ -18,7 +18,7 @@ mtcars %>% filter(hp > 150) %>% select(hp, mpg)
 
 # mutate / transmute
 
-mtcars$konnamikenagalon <- mtcars$hp / mtcars$mpg
+mtcars$konnamilenagalon <- mtcars$hp / mtcars$mpg
 
 mtcars %>% mutate(konnamilenagalon = hp / mpg)
 mtcars %>% transmute(konnamilenagalon = hp / mpg)
