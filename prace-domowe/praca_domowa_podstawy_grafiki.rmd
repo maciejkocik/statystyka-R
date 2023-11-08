@@ -60,7 +60,21 @@ vioplot(dane, col=c("maroon1", "royalblue"))
 Odejmij od wartości z kolumny z poziomem beta-endorfin 12 godzin przed operacją wartości 10 minut przed operacją. Uzyskany wektor będzie zawierał różnice między tymi pomiarami dla każdego badanego. Narysuj histogram i zinterpretuj go. Nie zapomnij o nałożeniu na wykres legendy oraz podpisów osi
 
 ```{r}
-# Tutaj miejsce na Twój kod
+par(mfrow=c(1,1))
+
+diff <- pomiary$X12_hours - pomiary$X10_minutes
+
+bins <- seq(min(diff)-1,
+            max(diff)+1, 
+            by=1 
+            )
+
+hist(diff, col="magenta", breaks = bins, main = "Różnica poziomu beta-endorfin pomiędzy pomiarami", xlab = "Różnica poziomu beta-endorfin", ylab = "Częstość")
+
+legend("topright", "Róznica", col="magenta", lwd=10)
+
+# TODO:
+# napisz wnioski
 ```
 
 *Tutaj miejsce na Twoją odpowiedź*
