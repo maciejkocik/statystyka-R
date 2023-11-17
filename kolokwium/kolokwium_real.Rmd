@@ -1,0 +1,291 @@
+---
+title: "Statystyka I z R - kolokwium"
+author: "mkocik/Maciej Kocik"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Zadanie 1 (2 pkt)
+
+Proszę przygotować polecenie `read.csv`, które poprawnie wczyta do R jako ramkę danych i przypisze do odpowiedniej zmiennej dane. **Uwaga!** Pod żadnym pozorem nie można modyfikować tekstu znajdującego się w zmiennych z danymi (`dane1` oraz `dane2`)
+
+## Podpunkt A (1 pkt)
+
+```{r}
+dane1 <- r"('100''Wanda''Kristi''Wanda.Kristi@yopmail.com''Wanda.Kristi@gmail.com''firefighter'
+'101''Pollyanna''Romelda''Pollyanna.Romelda@yopmail.com''Pollyanna.Romelda@gmail.com''developer'
+'102''Blondelle''Peonir''Blondelle.Peonir@yopmail.com''Blondelle.Peonir@gmail.com''developer'
+'103''Veda''Richers''Veda.Richers@yopmail.com''Veda.Richers@gmail.com''firefighter'
+'104''Aimil''Durante''Aimil.Durante@yopmail.com''Aimil.Durante@gmail.com''firefighter'
+'105''Dagmar''Lory''Dagmar.Lory@yopmail.com''Dagmar.Lory@gmail.com''police officer'
+'106''Jillayne''Decato''Jillayne.Decato@yopmail.com''Jillayne.Decato@gmail.com''firefighter'
+'107''Fayre''Longfellow''Fayre.Longfellow@yopmail.com''Fayre.Longfellow@gmail.com''police officer'
+'108''Helsa''Gale''Helsa.Gale@yopmail.com''Helsa.Gale@gmail.com''doctor'
+'109''Joane''Erich''Joane.Erich@yopmail.com''Joane.Erich@gmail.com''doctor')"
+
+df1 <- read.csv(
+  text = dane1,
+  sep = "'",
+  header=TRUE
+)
+df1
+```
+
+## Podpunkt B (1 pkt)
+
+```{r}
+dane2 <- r"(# Columns
+# 1: id - index
+# 2: firstname - first name
+# 3: lastname - last name
+# 4: email (work)
+# 5: email (private)
+# 6: occupation
+# ----------------------------
+100;Ardeen;Roscoe;Ardeen.Roscoe@yopmail.com;Ardeen.Roscoe@gmail.com;worker
+101;Leanna;Bebe;Leanna.Bebe@yopmail.com;Leanna.Bebe@gmail.com;police officer
+102;Corry;Sabella;Corry.Sabella@yopmail.com;Corry.Sabella@gmail.com;firefighter
+103;Phylis;Edvard;Phylis.Edvard@yopmail.com;Phylis.Edvard@gmail.com;firefighter
+104;Riannon;Strephon;Riannon.Strephon@yopmail.com;Riannon.Strephon@gmail.com;worker
+105;Dione;Weitman;Dione.Weitman@yopmail.com;Dione.Weitman@gmail.com;worker
+106;Etta;Nester;Etta.Nester@yopmail.com;Etta.Nester@gmail.com;firefighter
+# Next two observations were obtained illegaly
+107;Joane;Peti;Joane.Peti@yopmail.com;Joane.Peti@gmail.com;developer
+108;Hermione;Fink;Hermione.Fink@yopmail.com;Hermione.Fink@gmail.com;police officer
+109;Sharlene;My;Sharlene.My@yopmail.com;Sharlene.My@gmail.com;worker)"
+
+df2 <- read.csv(
+  text = dane2,
+  sep = ";",
+  comment.char = "#",
+  header = FALSE
+)
+df2
+```
+
+# Zadanie 2 (3 pkt)
+
+## Podpunkt A (1 pkt)
+
+Proszę stworzyć listę `lista_kolokwium` dla której wyrażenie `lista_kolokwium[[3]]$Struktura[3, c("prawdziwe", "kolokwium")][[2]]` zwraca wektor `c("odpowiedź")`
+
+```{r}
+lista_kolokwium <- list(
+  c(),
+  c(),
+  list(
+    "Struktura" = list(
+      c(), 
+      c(), 
+      c("prawdziwe", "kolokwium")
+      )
+    )
+)
+# xd
+
+# lista_kolokwium[[3]]$Struktura[3, c("prawdziwe", "kolokwium")][[2]]
+```
+
+## Podpunkt B (1 pkt)
+
+Proszę stworzyć listę `lista_kolokwium` dla której wyrażenie `levels(lista_kolowkium$K$ol$ok[["wium"]])` zwraca wektor `c("odpowiedź")`
+
+```{r}
+lista_kolowkium <- list(
+  K = list(
+    "ol" = list(
+      "ok" = list(
+        "wium" = c("odpowiedż")
+      )
+    )
+  )
+)
+
+lista_kolowkium$K$ol$ok[["wium"]]
+
+levels(lista_kolowkium$K$ol$ok[["wium"]]) <- c("odpowiedź")
+
+levels(lista_kolowkium$K$ol$ok[["wium"]])
+```
+
+## Podpunkt C (1pkt)
+
+Proszę stworzyć następującą macierz i przypisać ją do zmiennej `mtx`:
+
+```         
+T  NA T  F  T  NA T  F  ... T  NA T  F
+F  F  NA T  F  F  NA T  ... F  F  NA T
+NA F  T  F  NA F  T  F  ... NA F  T  F
+```
+
+Każdy wiersz macierzy ma mieć długość 100 elementów według podanego powyżej wzoru.
+
+```{r}
+elementy <- c("T", "NA", "T", "F")
+mtx <- matrix(elementy, nrow=1, ncol=100)
+
+elementy <- c("F", "F", "NA", "T")
+mtx <- rbind(mtx, matrix(elementy, nrow=1, ncol=100))
+
+elementy <- c("NA", "F", "T", "F")
+mtx <- rbind(mtx, matrix(elementy, nrow=1, ncol=100))
+mtx
+```
+
+# Zadanie 3 (3 pkt)
+
+Proszę wczytać dane ze zbioru `student-mat.csv` i odpowiedzieć na pytania poniżej.
+
+```{r}
+student_mat <- read.csv2("http://stat1.kursy.bartoszmackiewicz.pl/c/24/2/student-mat.csv")
+```
+
+Poniżej znajduje się książka kodowa dla tego zbioru danych.
+
+```         
+# Attributes for both student-mat.csv (Math course) and student-por.csv (Portuguese language course) datasets:
+1 school - student's school (binary: "GP" - Gabriel Pereira or "MS" - Mousinho da Silveira)
+2 sex - student's sex (binary: "F" - female or "M" - male)
+3 age - student's age (numeric: from 15 to 22)
+4 address - student's home address type (binary: "U" - urban or "R" - rural)
+5 famsize - family size (binary: "LE3" - less or equal to 3 or "GT3" - greater than 3)
+6 Pstatus - parent's cohabitation status (binary: "T" - living together or "A" - apart)
+7 Medu - mother's education (numeric: 0 - none,  1 - primary education (4th grade), 2 – 5th to 9th grade, 3 – secondary education or 4 – higher education)
+8 Fedu - father's education (numeric: 0 - none,  1 - primary education (4th grade), 2 – 5th to 9th grade, 3 – secondary education or 4 – higher education)
+9 Mjob - mother's job (nominal: "teacher", "health" care related, civil "services" (e.g. administrative or police), "at_home" or "other")
+10 Fjob - father's job (nominal: "teacher", "health" care related, civil "services" (e.g. administrative or police), "at_home" or "other")
+11 reason - reason to choose this school (nominal: close to "home", school "reputation", "course" preference or "other")
+12 guardian - student's guardian (nominal: "mother", "father" or "other")
+13 traveltime - home to school travel time (numeric: 1 - <15 min., 2 - 15 to 30 min., 3 - 30 min. to 1 hour, or 4 - >1 hour)
+14 studytime - weekly study time (numeric: 1 - <2 hours, 2 - 2 to 5 hours, 3 - 5 to 10 hours, or 4 - >10 hours)
+15 failures - number of past class failures (numeric: n if 1<=n<3, else 4)
+16 schoolsup - extra educational support (binary: yes or no)
+17 famsup - family educational support (binary: yes or no)
+18 paid - extra paid classes within the course subject (Math or Portuguese) (binary: yes or no)
+19 activities - extra-curricular activities (binary: yes or no)
+20 nursery - attended nursery school (binary: yes or no)
+21 higher - wants to take higher education (binary: yes or no)
+22 internet - Internet access at home (binary: yes or no)
+23 romantic - with a romantic relationship (binary: yes or no)
+24 famrel - quality of family relationships (numeric: from 1 - very bad to 5 - excellent)
+25 freetime - free time after school (numeric: from 1 - very low to 5 - very high)
+26 goout - going out with friends (numeric: from 1 - very low to 5 - very high)
+27 Dalc - workday alcohol consumption (numeric: from 1 - very low to 5 - very high)
+28 Walc - weekend alcohol consumption (numeric: from 1 - very low to 5 - very high)
+29 health - current health status (numeric: from 1 - very bad to 5 - very good)
+30 absences - number of school absences (numeric: from 0 to 93)
+
+# these grades are related with the course subject, Math or Portuguese:
+31 G1 - first period grade (numeric: from 0 to 20)
+31 G2 - second period grade (numeric: from 0 to 20)
+32 G3 - final grade (numeric: from 0 to 20, output target)
+
+Additional note: there are several (382) students that belong to both datasets . 
+These students can be identified by searching for identical attributes
+that characterize each student, as shown in the annexed R file.
+```
+
+## Podpunkt A (1 pkt)
+
+Czy w próbie badanych było więcej kobiet, czy mężczyzn pozostających w związku romantycznym?
+
+```{r}
+table(student_mat$sex, student_mat$romantic)
+```
+
+W próbie było więcej kobiet pozostających w związku romantycznym.
+
+## Podpunkt B (2 pkt)
+
+Proszę usunąć z danych wszystkie obserwacje dotyczące osób, które oblały kurs wcześniej, i ustalić, dla którego poziomu czasu poświęcanego na naukę tygodniowo, średnia różnica między oceną z pierwszego okresu i oceną końcową jest najwyższa.
+
+```{r}
+good_students <- student_mat[student_mat$failures == 0, ]
+good_students$diff <- good_students$G1 - good_students$G3
+library(dplyr)
+
+g <- good_students %>% group_by(studytime) %>% summarize(diff = mean(diff))
+
+g
+```
+
+U studentów poświęcających więcej niż 10 godzin na naukę różnica ta była średnio największa.
+
+# Zadanie 4 (2 pkt)
+
+## Podpunkt A (1 pkt)
+
+Proszę, korzystając ze zbioru danych `women`, przygotować wykres rozrzutu (*scatterplot*, wykres punktowy) ilustrujący relację między objętością kobiet w centymetrach sześciennych a ich wagą w tonach. Przygotowując wykres proszę pamiętać o podpisaniu osi oraz innych kluczowych elementów wykresu. Proszę na potrzeby zadania przyjąć, że kobiety są walcami o polu podstawy równym 50cm2.
+
+```{r}
+women$height = women$height * 2.5
+women$weight = women$weight * 0.5 / 1000
+women$obj = women$height * 50
+
+plot(obj ~ weight, data = women, xlab = "Waga (w t)", ylab="Objętość (w cm3)", main="Relacja pomiędzy objętością a wagę kobiet")
+```
+
+## Podpunkt B (1 pkt)
+
+Proszę, korzystając ze zbioru danych `swiss`, przygotować wykres liniowy (*scatterplot* z punktami połączonymi odcinkami) ilustrujący zależność między procentem osób wyznającym katolicyzm w danej prowincji a rozrodczością.
+
+Proszę oznaczyć innym kolorem na wykresie prowicje, w których a) odsetek mężczyzn pracujących w rolnictwie jest niższy lub równy 50%, b) wyższy niż 50%.
+
+Do wykresu proszę dodać przerywane poziomie linie wyznaczające średnii wskaźnik rozrodczości dla każdej z dwóch kategorii prowincji. Kolor poszczególnych linii powinien odpowiadać kolorowi wybranemu dla punktów.
+
+Do wykresu proszę dodać odpowiednią legendę. Proszę nie zapominieć o podpisach, osiach, itp.
+
+```{r}
+
+plot(swiss$Fertility, type="o", col="blue", ylim= 
+       c(
+        min(c(swiss$Fertility, swiss$Catholic)),
+        max(c(swiss$Fertility, swiss$Catholic))
+       ), xlab = "Prowincje", ylab= "Odsetek (w %)", main="Zależność pomiędzy procentem osób wyznających 
+       katolicyzm a rozrodzczością")
+
+points(swiss$Catholic, type="o", col="red")
+```
+
+# Zadanie 5 (2 pkt)
+
+Napisz funkcję `exchange(amount, currency_to, currency_from = "EUR")` przyjmującą trzy argumenty w postaci trzyliterowych symboli walut i dokonującą konwersji między walutami. Dane niezbędne do wykonania zadania znajdują się w zbiorze danych `euro` i można z nich korzystać w funkcji.
+
+Na przykład, wywołanie funkcji `exchange(20, "DEM", "FRF")` powinno zwrócić wartość 20 franków w niemieckich markach (\~ 6 marek). W przypadku niepodania drugiego argumentu, funkcja powinna domyślnie przeliczać euro na walutę podaną jako `currency_to`. Na przykład `exchange(5, "DEM` powinno przeliczyć 5 euro na marki (\~ 10 marek). Jeżeli dana waluta nie znajduje się w zbiorze danych, funkcja powinna zwrócić NA i wydrukować na ekranie komunikat "Nie odnaleziono waluty: {symbol waluty}".
+
+```{r}
+exchange <- function(amount, currency_to, currency_from = "EUR"){
+  if (!is.na(euro[currency_to])){
+    if (currency_from == "EUR")
+      return(as.numeric(amount*euro[currency_to]))
+    else if (!is.na(euro[currency_from]))
+      return(as.numeric(amount / euro[currency_from] * euro[currency_to]))
+    else{
+      cat(c("Nie odnaleziono waluty:", currency_from), "\n")
+      return(NA)
+    }
+  } else if(currency_to == "EUR"){
+      if (!is.na(euro[currency_from]))
+        return(as.numeric(amount/euro[currency_from]))
+      else if(currency_from == "EUR")
+        return(amount)
+      else{
+        cat(c("Nie odnaleziono waluty:", currency_from), "\n")
+        return(NA)
+      }
+  }
+  else{
+      cat("Nie odnaleziono waluty:", currency_to, "\n")
+      return(NA)
+  }
+}
+# Testy
+exchange(5, "DEM") # 9.77915
+exchange(20, "DEM", "FRF") # 5.963287
+exchange(120, "DEM", "BEF") # 5.818051
+exchange(120, "BEF", "BEF") # 120
+exchange(100, "EUR", "EUR") # 100
+exchange(100, "EUR", "DEM") # 51.12919
+exchange(100, "EUR", "BOB") # NA + komunikat
+```
