@@ -1,0 +1,207 @@
+---
+title: "Statystyka I z R - kolokwium (ćwiczenia)"
+author: "Bartosz"
+date: "2023-11-14"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+# Zadanie 1 (2 pkt)
+
+Proszę przygotować polecenie `read.csv`, które poprawnie wczyta do R jako ramkę danych i przypisze do zmiennej `df1` następujące dane.
+
+## Podpunkt A (1 pkt)
+
+```{r}
+dane1 <- "id|firstname|lastname|email|email2|profession
+100|Candy|Old|Candy.Old@yopmail.com|Candy.Old@gmail.com|firefighter
+101|Molli|Santoro|Molli.Santoro@yopmail.com|Molli.Santoro@gmail.com|developer
+102|Leia|Ranjiv|Leia.Ranjiv@yopmail.com|Leia.Ranjiv@gmail.com|police officer
+103|Kaia|Herrera|Kaia.Herrera@yopmail.com|Kaia.Herrera@gmail.com|worker
+104|Lonnie|Taam|Lonnie.Taam@yopmail.com|Lonnie.Taam@gmail.com|developer"
+
+df1 <- read.csv(
+  text = dane1,
+  # Tu jest miejsce na Twój kod
+  sep = "|"
+)
+df1
+```
+
+## Podpunkt B (1 pkt)
+
+```{r}
+dane2 <- 
+r"(test1  test2 test3
+"id", "firstname", "lastname", "email", "email2", "profession"
+,id,',firstname,',lastname,',email,',email2,',profession,
+100',Candy,',Old,',Candy.Old@yopmail.com,',Candy.Old@gmail.com,',firefighter,
+101',Molli,',Santoro,',Molli.Santoro@yopmail.com,',Molli.Santoro@gmail.com,',developer,
+102',Leia,',Ranjiv,',Leia.Ranjiv@yopmail.com,',Leia.Ranjiv@gmail.com,',police officer,
+103',Kaia,',Herrera,',Kaia.Herrera@yopmail.com,',Kaia.Herrera@gmail.com,',worker,
+104',Lonnie,',Taam,',Lonnie.Taam@yopmail.com,',Lonnie.Taam@gmail.com,',developer,)"
+
+df2 <- read.csv(
+  text = dane2,
+  # Tu jest miejsce na Twój kod
+  sep = "'",
+  quote = ",",
+  skip = 2
+)
+df2
+```
+
+
+# Zadanie 2 (3 pkt)
+
+## Podpunkt A (1 pkt)
+
+Proszę stworzyć listę o nazwie `lista_kolokwium` dla której wyrażenie ```lista_kolokwium[["Zadanie 2"]]$PodpunktA[["Odpowiedź"]]``` zwraca wektor `c("odpowiedź")`
+
+```{r}
+lista_kolokwium <- list("Zadanie 2" = list("PodpunktA" = list("Odpowiedź" = "odpowiedź")))
+lista_kolokwium[["Zadanie 2"]]$PodpunktA[["Odpowiedź"]]
+```
+
+## Podpunkt B (1 pkt)
+
+Proszę stworzyć listę o nazwie `lista_kolokwium` dla której wyrażenie ```lista_kolowkium[[2]]$`2`[[2]][2]``` zwraca wektor `c("odpowiedź")`
+
+```{r}
+# Tutaj miejsce na Twój kod
+lista_kolokwium <- list(c(), list(`2` = list(c(), c("", "odpowiedź"))))
+lista_kolokwium[[2]]$`2`[[2]][2]
+```
+
+## Podpunkt C (1pkt)
+
+ Proszę stworzyć następującą ramkę danych i przypisać ją do zmiennej `anime`:
+ 
+ ```
+ anime            | rok emisji    | kraj
+ -----------------|---------------|-----------------------------
+ pszczółka maja   | 1975          | Japonia / Austria / RFN
+ muminki          | 1990          | Japonia / Holandia Finlandia
+ ```
+ 
+ 
+```{r}
+# Tutaj miejsce na Twój kod
+anime <- data.frame(anime = c("pszczółka maja", "muminki"),
+                    "rok emisji" = c(1975, 1990),
+                    kraj = c("Japonia / Austria / RFN", "Japonia / Holandia Finlandia")
+                  )
+anime
+```
+
+# Zadanie 3 (3 pkt)
+
+Proszę wczytać dane ze zbioru `imodyfikatory.csv` i odpowiedzieć na pytania poniżej.
+
+```{r}
+imodyfikatory <- read.csv("http://stat1.kursy.bartoszmackiewicz.pl/c/5/2/imodyfikatory.csv")
+```
+
+## Podpunkt A (1 pkt)
+
+Czy w próbie badanych było więcej kobiet, czy mężczyzn z wyższym wykształceniem?
+
+```{r}
+# Tutaj miejsce na Twój kod
+table(imodyfikatory$Płeć, imodyfikatory$Wykształcenie)
+```
+
+*Tutaj miejsce na Twoją odpowiedź*
+
+## Podpunkt B (1 pkt)
+
+Proszę usunąć z danych wszystkie obserwacje, dla których rok urodzenia nie mieści się w przedziale 1900-2005, i ustalić, dla jakiego wykształcenia odchylenie standardowe wieku (`sd()`) jest najwyższe.
+
+```{r}
+# Tutaj miejsce na Twój kod
+imods <- imodyfikatory[(imodyfikatory$Rok.urodzenia > 1900) & (imodyfikatory$Rok.urodzenia < 2005),]
+tapply(imods$Rok.urodzenia, imods$Wykształcenie, sd)
+```
+
+*Tutaj miejsce na Twoją odpowiedź*
+
+## Podpunkt C (1 pkt)
+
+Jaka jest średnia liczebność grup badawczych (tzn. liczba obserwacji dla każdej z kombinacji wartości z kolumny `Grupa` i kolumny `Modyfikator`)?
+
+```{r}
+# Tutaj miejsce na Twój kod
+library(dplyr)
+imodyfikatory %>% group_by(Grupa, Modyfikator) %>% summarize(n = n()) %>% ungroup() %>% summarize(M = mean(n))
+```
+
+*Tutaj miejsce na Twoją odpowiedź*
+
+# Zadanie 4 (2 pkt)
+
+## Podpunkt A
+
+Proszę, korzystając ze zbioru danych `Orange`, przygotować wykres rozrzutu (*scatterplot*) ilustrujący relację między średnicą drzewa pomarańczowego (obwód podany jest w `circumference`) a jego wiekiem (`age`). Przygotowując wykres proszę pamiętać o podpisaniu osi oraz innych kluczowych elementów wykresu. Proszę przyjąć, że pnie drzew mają przekrój idealnego okręgu.
+
+```{r}
+# Tutaj miejsce na Twój kod
+Orange$diameter <- Orange$circumference / pi
+plot(diameter ~ age, data = Orange, xlab = "Age in days", ylab = "Diameter in mm")
+```
+
+## Podpunkt B
+
+Proszę, korzystając ze zbioru danych `airquality`, przygotować wykres skrzypcowy ilustrujący pomiary temperatury w każdym miesiącu obserwacji. Przygotowując wykres proszę pamiętać o podpisaniu osi oraz innych kluczowych elementów wykresu. Proszę dla każdego miesiąca użyć innego wybranego przez siebie koloru i dodać legendę do wykresu.
+
+```{r}
+# Tutaj miejsce na Twój kod
+vioplot::vioplot(Temp ~ Month, data = airquality,
+                 col = c("red", "blue", "green", "yellow", "brown"))
+legend(x = "topleft",
+       legend = c("Maj", "Czerwiec", "Lipec", "Sierpień", "Wrzesień"),
+       pch = 12,
+       col = c("red", "blue", "green", "yellow", "brown")
+       )
+```
+
+# Zadanie 5
+
+Napisz funkcję `przekoduj(wartosc)` przyjmującą jeden argument, która przekodowuje wartość według następującego wzoru i zwraca przekodowaną wartość:
+
+```
+"A1" -> -3
+"A2" -> -2
+"A3" -> -1
+"A4" ->  0
+"A5" ->  1
+"A6" ->  2
+"A7" ->  3
+wszystkie inne wartości -> NA
+```
+
+```{r}
+wektor <- c("A1", "A1", "A7", "A6", "A5", "A4", "A7", "A2", "A3")
+przekoduj <- function(wartosc){
+  if (wartosc == "A1"){
+    return(-3)
+  } else if (wartosc == "A2"){
+    return(-2)
+  } else if (wartosc == "A3"){
+    return(-1)
+  } else if (wartosc == "A4"){
+    return(0)
+  } else if (wartosc == "A5"){
+    return(1)
+  } else if (wartosc == "A6"){
+    return(2)
+  } else if (wartosc == "A7"){
+    return(3)
+  } else {
+    return(NA)
+  }
+}
+
+# To polecenie powinno zwrócić przekodowany wektor tzn. c(-3, -3, 3, 2, 1, 0, 3, -2, -1)
+sapply(wektor, przekoduj)
+```
