@@ -15,22 +15,22 @@ Hoaglin, Mosteller i Tukey (1983) zebrali dane na temat poziomu beta-endorfin we
 Przygotuj dwa histogramy ilustrujący rozkład wartości w obu pomiarach. Nie zapomnij o nałożeniu na wykres legendy oraz podpisów osi. Co możesz na podstawie tych dwóch histogramów wywnioskować?
 
 ```{r}
-# pomiary <- read.csv("dane/hoaglin1983.csv")
+pomiary <- read.csv("dane/hoaglin1983.csv")
 
 par(mfrow = c(1, 2))
 
-hist(pomiary$X12_hours, col="blue", main = "12 godzin przed operacją", xlab = "Poziom beta-endorfin", ylab = "Częstość", breaks=10)
+hist(pomiary$X12_hours, col="blue", main = "12 godzin przed operacją", xlab="", ylab = "Częstość", breaks=10)
 
-hist(pomiary$X10_minutes, col="red", main = "10 minut przed operacją", xlab = "Poziom beta-endorfin", ylab = "Częstość", breaks=10)
+hist(pomiary$X10_minutes, col="red", main = "10 minut przed operacją", xlab="", ylab = "Częstość", breaks=10)
 
+mtext("Poziom beta-endorfin we krwi", side = 1, line = -2, outer = TRUE)
 legend("topright", c("12h przed", "10min przed"), col=c("blue", "red"), lwd=10)
 
-# TODO:
-# edytuj breaks
-# napisz wnioski
 ```
 
-*Tutaj miejsce na Twoją odpowiedź*
+**Wnioski:**
+
+Na podstawie tych diagramów można wywnioskować, że poziom beta-endorfin we krwi 10 minut przed operacją był ogólnie wyższy niż 12 godzin przed operacją. U 2 pacjentów stres przed operacją był zauważalnie wyższy, gdyż poziom beta-endorfin we krwi osiągnął u nich wynik rzędu 40-50 fmol/ml. Diagramy te nie mówią nam jednak nic o tym, jak zwiększał/zmniejszał się poziom stresu, gdyż nie ma na nich ukazanej różnicy u poszczególnych pacjentów, a jedynie wartości przed/po w całej grupie.
 
 ## Zadanie B
 
@@ -38,22 +38,30 @@ Przygotuj wykres pudełkowy (`boxplot`), wykres słupkowy (`barplot`) wykres skr
 
 ```{r}
 library(vioplot)
-par(mfrow=c(1,1))
+par(mfrow=c(1,2), xpd=TRUE)
+boxplot(pomiary$X12_hours, col="hotpink", main = "12 godzin przed operacją")
+boxplot(pomiary$X10_minutes, col= "cyan3", main = "10 minut przed operacją")
+legend(0.8, 0, c("12h przed", "10min przed"), col=c("hotpink", "cyan3"), lwd=10)
+mtext("Poziom beta-endorfin we krwi", side = 1, line = -2, outer = TRUE)
 
-dane <- data.frame(A = pomiary$X12_hours, B = pomiary$X10_minutes)
 
-boxplot(dane, col=c("hotpink", "cyan"))
+barplot(pomiary$X12_hours, col="deeppink", main = "12 godzin przed operacją")
+barplot(pomiary$X10_minutes, col="dodgerblue", main = "10 minut przed operacją")
+legend(7, -3.5, c("12h przed", "10min przed"), col=c("deeppink", "dodgerblue"), lwd=10)
+mtext("Poziom beta-endorfin we krwi", side = 1, line = -2, outer = TRUE)
 
-barplot(as.matrix(dane), beside=TRUE, col=c("deeppink", "dodgerblue"))
 
-vioplot(dane, col=c("maroon1", "royalblue"))
+vioplot(pomiary$X12_hours, col="maroon1", main = "12 godzin przed operacją")
+vioplot(pomiary$X10_minutes, col="royalblue", main = "10 minut przed operacją")
+legend(0.8, 0, c("12h przed", "10min przed"), col=c("maroon1", "royalblue"), lwd=10)
+mtext("Poziom beta-endorfin we krwi", side = 1, line = -2, outer = TRUE)
 
-# TODO:
-# podpisz wykresy (osie i legenda)
-# zapisz wnioski
+
 ```
 
-*Tutaj miejsce na Twoją odpowiedź*
+**Wnioski:**
+
+Według mnie, najprostszy do odczytania jest wykres pudełkowy. Możemy na nim łatwo zauważyć na przykład, że mediana poziomu beta-endorfin we krwi jest mniejsza 10 minut przed operacją oraz że występują w tym zbiorze dwie wartości odstające. Na wykresie słupkowym wartości te też są widoczne, natomiast ciężej jest odczytać z niego coś o medianie i kwartylach. Wykres skrzypcowy jest dla mnie trochę mało czytelny, ale może po prostu muszę nauczyć się go odczytywać 😅
 
 ## Zadanie C
 
@@ -69,15 +77,14 @@ bins <- seq(min(diff)-1,
             by=1 
             )
 
-hist(diff, col="magenta", breaks = bins, main = "Różnica poziomu beta-endorfin pomiędzy pomiarami", xlab = "Różnica poziomu beta-endorfin", ylab = "Częstość")
+hist(diff, col="paleturquoise3", breaks = bins, main = "Różnica poziomu beta-endorfin pomiędzy pomiarami", xlab = "Różnica poziomu beta-endorfin we krwi", ylab = "Częstość")
 
-legend("topright", "Róznica", col="magenta", lwd=10)
-
-# TODO:
-# napisz wnioski
+legend("topright", "Róznica", col="paleturquoise3", lwd=10)
 ```
 
-*Tutaj miejsce na Twoją odpowiedź*
+**Wnioski:**
+
+U większości pacjentów różnica poziomu beta-endorfin we krwi była bardzo niewielka (w okolicach 0), lecz w niektórych przypadkach wzrósł on nawet o 40 fmol/ml, co może sugerować, że pacjenci stresują się bardziej 10 minut przed operacją niż 12 godzin przed. Uważam, że lepsze byłoby zastosowanie tutaj wykresu pudełkowego (boxplot), aby sensowniej zinterpretować dane.
 
 # Zadanie 2
 
@@ -88,7 +95,22 @@ Wiemy, że palenie tytoniu odpowiada za wiele negatywnych skutków dla ludzkiego
 Przygotuj wykres słupkowy (*stacked barplot*), składający się z dwóch kolumn. Jedna odpowiadać ma kobietom palącym, druga kobietom niepalącym. Segmenty każdej z kolumn mają odpowiadać proporcji kobiet w danej grupie, dla których od zakończenia antykoncepcji do zajścia w ciąże upłynęł 1 cykl, 2 cykle i 3+ cykle. Do opracowania statystycznego danych przydadzą się funkcje `table` oraz `prop.table`. Wykres stworzyć można korzystając z funkcji `barplot`. Nie zapomnij o nałożeniu na wykres legendy oraz podpisów osi, spróbuj również wybrać czytelne kolory dla poszczególnych segmentów. Co możesz stwierdzić na podstawie takiego wykresu?
 
 ```{r}
-# Tutaj miejsce na Twój kod
+palenie <- read.csv("dane/weinberg1986.csv")
+
+par(mfrow=c(1,1))
+
+barplot(prop.table(table(palenie$Cycles, palenie$Smoking), 2),
+        horiz=TRUE,
+        col= c("lightsalmon", "mediumpurple", "palegreen"),
+        main="Ilość cykli miesiączkowych od zakończenia antykoncepcji do ciąży",
+        xlab="Częstość (w %)",
+        legend=TRUE)
 ```
 
-*Tutaj miejsce na Twoją odpowiedź*
+**Wnioski:**
+
+Na podstawie wykresu mogę stwierdzić, że u kobiet niepalących łatwiejsze było zajście w ciążę. Ponad połowa kobiet palących zachodziła w ciążę dopiero po ponad 3 cyklach miesiączkowych, natomiast u kobiet niepalących odsetek ten wynosił niecałe 40%.
+
+## Uwagi:
+
+W zadaniach 1A i 1B zrezygnowałem z podpisania osi X na wykresach na rzecz jednego podpisu na dole całej "figure", ponieważ w ten sposób wykresy są moim zdaniem czytelniejsze.
